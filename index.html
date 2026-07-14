@@ -1,0 +1,3368 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hüseyin Ayhan | Editör & Yazılım Geliştirici</title>
+    <meta name="description"
+        content="Hüseyin Ayhan - Editör ve yazılım geliştirici portfolyosu. C#, Python, OpenCV, MediaPipe, Adobe AE, Premiere Pro." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ========== ROOT & RESET ========== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #080c14;
+            --bg-secondary: #0e1420;
+            --bg-card: #121929;
+            --bg-card-hover: #172134;
+            --accent: #6c63ff;
+            --accent2: #00d4ff;
+            --accent3: #ff6b6b;
+            --text-primary: #e8eaf0;
+            --text-muted: #7a84a1;
+            --border: #1e2840;
+            --border-glow: rgba(108, 99, 255, .4);
+            --gradient: linear-gradient(135deg, #6c63ff 0%, #00d4ff 100%);
+            --gradient2: linear-gradient(135deg, #ff6b6b 0%, #ffa36b 100%);
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
+            --radius: 16px;
+            --transition: .3s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        /* ========== NOISE OVERLAY ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: .4;
+        }
+
+        /* ========== NAV ========== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(8, 12, 20, .85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: .9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 1px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all var(--transition);
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            background: rgba(8, 12, 20, .97);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            flex-direction: column;
+            gap: 1.2rem;
+            z-index: 999;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ========== SECTION BASE ========== */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-family: var(--font-code);
+            font-size: .75rem;
+            font-weight: 500;
+            color: var(--accent);
+            background: rgba(108, 99, 255, .12);
+            border: 1px solid rgba(108, 99, 255, .25);
+            padding: .3rem .8rem;
+            border-radius: 999px;
+            margin-bottom: 1rem;
+            letter-spacing: .5px;
+        }
+
+        h2.section-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-line {
+            width: 60px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+            margin-bottom: 3rem;
+        }
+
+        /* ========== HERO ========== */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .orb1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(108, 99, 255, .15);
+            top: -100px;
+            left: -150px;
+        }
+
+        .orb2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 212, 255, .1);
+            bottom: -80px;
+            right: -100px;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-label {
+            font-family: var(--font-code);
+            font-size: .85rem;
+            color: var(--accent2);
+            margin-bottom: .8rem;
+            opacity: 0;
+            animation: fadeUp .8s .2s forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp .8s .4s forwards;
+        }
+
+        .hero-title .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp .8s .6s forwards;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .6rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp .8s .7s forwards;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .8rem;
+            font-weight: 500;
+            padding: .35rem .8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            background: var(--bg-card);
+        }
+
+        .badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp .8s .9s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.8rem;
+            border-radius: 999px;
+            font-family: var(--font-main);
+            font-size: .9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: #fff;
+            box-shadow: 0 4px 25px rgba(108, 99, 255, .4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(108, 99, 255, .55);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background: rgba(108, 99, 255, .1);
+            transform: translateY(-2px);
+        }
+
+        .hero-avatar {
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s .5s forwards;
+        }
+
+        .avatar-ring {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: var(--gradient);
+            padding: 3px;
+            animation: spin 8s linear infinite;
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .avatar-placeholder {
+            font-size: 4.5rem;
+            line-height: 1;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .4rem;
+            color: var(--text-muted);
+            font-size: .75rem;
+            animation: bounce 2s infinite;
+            opacity: 0;
+            animation: fadeIn 1s 1.5s forwards, bounce 2s 1.5s infinite;
+        }
+
+        .scroll-arrow {
+            font-size: 1.2rem;
+        }
+
+        /* ========== ABOUT ========== */
+        #about {
+            background: var(--bg-secondary);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-img-wrap {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .about-card-deco {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card-deco::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient);
+            opacity: .05;
+        }
+
+        .about-icon {
+            font-size: 4rem;
+        }
+
+        .about-name-tag {
+            font-family: var(--font-code);
+            font-size: .9rem;
+            color: var(--accent);
+            background: rgba(108, 99, 255, .1);
+            padding: .4rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(108, 99, 255, .2);
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: .8rem;
+            color: var(--text-muted);
+            margin-top: .2rem;
+        }
+
+        .info-list {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .8rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            font-size: .9rem;
+            color: var(--text-muted);
+        }
+
+        .info-item .icon {
+            font-size: 1.1rem;
+        }
+
+        .info-item strong {
+            color: var(--text-primary);
+        }
+
+        /* ========== SKILLS ========== */
+        #skills {
+            background: var(--bg-primary);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .skill-category:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-4px);
+        }
+
+        .skill-category:hover::before {
+            opacity: .04;
+        }
+
+        .skill-cat-header {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .skill-cat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .icon-purple {
+            background: rgba(108, 99, 255, .2);
+        }
+
+        .icon-cyan {
+            background: rgba(0, 212, 255, .15);
+        }
+
+        .icon-red {
+            background: rgba(255, 107, 107, .15);
+        }
+
+        .icon-green {
+            background: rgba(0, 220, 130, .15);
+        }
+
+        .skill-cat-title {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        .skill-tag {
+            font-family: var(--font-code);
+            font-size: .78rem;
+            padding: .3rem .75rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, .03);
+            transition: all var(--transition);
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(108, 99, 255, .1);
+        }
+
+        .skill-bar-item {
+            margin-bottom: 1rem;
+        }
+
+        .skill-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: .85rem;
+            margin-bottom: .4rem;
+        }
+
+        .skill-bar-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--gradient);
+            width: 0;
+            transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        /* ========== PROJECTS ========== */
+        #projects {
+            background: var(--bg-secondary);
+        }
+
+        .projects-info {
+            background: rgba(108, 99, 255, .08);
+            border: 1px solid rgba(108, 99, 255, .2);
+            border-radius: var(--radius);
+            padding: 1.4rem 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .projects-info-icon {
+            font-size: 1.5rem;
+        }
+
+        .projects-info p {
+            font-size: .9rem;
+            color: var(--text-muted);
+        }
+
+        .projects-info strong {
+            color: var(--text-primary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity var(--transition);
+            pointer-events: none;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-glow);
+            box-shadow: 0 20px 60px rgba(108, 99, 255, .2);
+        }
+
+        .project-card:hover::after {
+            opacity: .04;
+        }
+
+        .project-header {
+            padding: 1.8rem 1.8rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .project-emoji {
+            font-size: 2.2rem;
+        }
+
+        .project-badge {
+            font-size: .7rem;
+            font-weight: 600;
+            font-family: var(--font-code);
+            padding: .25rem .7rem;
+            border-radius: 999px;
+        }
+
+        .badge-software {
+            background: rgba(108, 99, 255, .2);
+            color: var(--accent);
+            border: 1px solid rgba(108, 99, 255, .3);
+        }
+
+        .badge-media {
+            background: rgba(0, 212, 255, .15);
+            color: var(--accent2);
+            border: 1px solid rgba(0, 212, 255, .3);
+        }
+
+        .badge-vision {
+            background: rgba(0, 220, 130, .15);
+            color: #00dc82;
+            border: 1px solid rgba(0, 220, 130, .3);
+        }
+
+        .badge-app {
+            background: rgba(255, 107, 107, .15);
+            color: var(--accent3);
+            border: 1px solid rgba(255, 107, 107, .3);
+        }
+
+        .project-body {
+            padding: 0 1.8rem 1.8rem;
+        }
+
+        .project-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+
+        .project-desc {
+            font-size: .88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+        }
+
+        .tech-pill {
+            font-family: var(--font-code);
+            font-size: .72rem;
+            padding: .2rem .6rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, .05);
+            color: var(--text-muted);
+        }
+
+        .project-footer {
+            padding: 1rem 1.8rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .project-cta {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--accent);
+            transition: gap var(--transition);
+        }
+
+        .project-card:hover .project-cta {
+            gap: .7rem;
+        }
+
+        /* ========== HARDWARE & HOBBIES ========== */
+        #hardware {
+            background: var(--bg-primary);
+        }
+
+        .hardware-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .hw-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all var(--transition);
+        }
+
+        .hw-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-3px);
+        }
+
+        .hw-card-title {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.4rem;
+        }
+
+        .hw-spec {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: .5rem 1.2rem;
+            align-items: center;
+        }
+
+        .spec-label {
+            font-family: var(--font-code);
+            font-size: .78rem;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .spec-value {
+            font-size: .88rem;
+            color: var(--text-muted);
+        }
+
+        .spec-value strong {
+            color: var(--text-primary);
+        }
+
+        .hobbies-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .hobby-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: .8rem 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--border);
+        }
+
+        .hobby-icon {
+            font-size: 1.4rem;
+        }
+
+        .hobby-text {
+            font-size: .88rem;
+            color: var(--text-muted);
+        }
+
+        .hobby-text strong {
+            color: var(--text-primary);
+            display: block;
+        }
+
+        /* ========== CONTACT ========== */
+        #contact {
+            background: var(--bg-secondary);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: .8rem;
+        }
+
+        .contact-info p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition);
+        }
+
+        .contact-method:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+            background: var(--bg-card-hover);
+        }
+
+        .cm-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .cm-wp {
+            background: rgba(37, 211, 102, .15);
+        }
+
+        .cm-ph {
+            background: rgba(108, 99, 255, .15);
+        }
+
+        .cm-loc {
+            background: rgba(255, 107, 107, .15);
+        }
+
+        .cm-label {
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        .cm-value {
+            font-size: .92rem;
+            font-weight: 600;
+        }
+
+        .contact-wp-card {
+            background: linear-gradient(135deg, rgba(37, 211, 102, .1) 0%, rgba(37, 211, 102, .02) 100%);
+            border: 1px solid rgba(37, 211, 102, .25);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .wp-icon-big {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-wp-card h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: .6rem;
+        }
+
+        .contact-wp-card p {
+            font-size: .88rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .wp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .85rem 2rem;
+            background: #25d366;
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .95rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+        }
+
+        .wp-btn:hover {
+            background: #20ba5a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, .4);
+        }
+
+        .wp-note {
+            margin-top: 1rem;
+            font-size: .78rem;
+            color: var(--text-muted);
+            font-family: var(--font-code);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: .82rem;
+        }
+
+        footer span {
+            color: var(--accent);
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(108, 99, 255, .5);
+            }
+
+            100% {
+                box-shadow: 0 0 0 20px rgba(108, 99, 255, 0);
+            }
+        }
+
+        /* ========== REVEAL ON SCROLL ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .delay-1 {
+            transition-delay: .1s;
+        }
+
+        .delay-2 {
+            transition-delay: .2s;
+        }
+
+        .delay-3 {
+            transition-delay: .3s;
+        }
+
+        .delay-4 {
+            transition-delay: .4s;
+        }
+
+        .delay-5 {
+            transition-delay: .5s;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hardware-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                justify-items: center;
+            }
+
+            .hero-badges {
+                justify-content: center;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .avatar-ring {
+                width: 160px;
+                height: 160px;
+            }
+
+            .avatar-placeholder {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            section {
+                padding: 3.5rem 1.2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: .65rem 1.4rem;
+                font-size: .85rem;
+            }
+        }
+
+        /* ========== SCROLL PROGRESS BAR ========== */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+            height: 3px;
+            width: 0%;
+            background: var(--gradient);
+            transition: width .1s linear;
+        }
+
+        /* ========== THEME TOGGLE ========== */
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            width: 44px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: background var(--transition);
+            flex-shrink: 0;
+        }
+
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .7rem;
+            transition: left var(--transition), content var(--transition);
+            line-height: 20px;
+            text-align: center;
+        }
+
+        body.light .theme-toggle::after {
+            content: '☀️';
+            left: 22px;
+        }
+
+        body.light .theme-toggle {
+            background: #e0e7ff;
+            border-color: #c7d2fe;
+        }
+
+        /* ========== LIGHT MODE ========== */
+        body.light {
+            --bg-primary: #f0f4ff;
+            --bg-secondary: #e5ecff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f4ff;
+            --text-primary: #1a1f36;
+            --text-muted: #64748b;
+            --border: #d1daf0;
+            --border-glow: rgba(108, 99, 255, .3);
+        }
+
+        body.light nav {
+            background: rgba(240, 244, 255, .92);
+        }
+
+        body.light .mobile-menu {
+            background: rgba(240, 244, 255, .98);
+        }
+
+        body.light footer {
+            background: var(--bg-secondary);
+        }
+
+        /* ========== TYPING CURSOR ========== */
+        .typing-text {
+            display: inline;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: var(--accent);
+            margin-left: 3px;
+            vertical-align: middle;
+            animation: blink .7s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0
+            }
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0, 0, 0, .75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(30px) scale(.97);
+            transition: transform var(--transition);
+        }
+
+        .modal-overlay.open .modal {
+            transform: none;
+        }
+
+        .modal-header {
+            padding: 1.8rem 1.8rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-close {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition);
+            color: var(--text-primary);
+        }
+
+        .modal-close:hover {
+            background: var(--accent3);
+            border-color: var(--accent3);
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 1.8rem;
+        }
+
+        .modal-preview {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            overflow: hidden;
+        }
+
+        .modal-desc {
+            font-size: .92rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-wp {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .8rem 1.5rem;
+            background: #25d366;
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .9rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+        }
+
+        .modal-wp:hover {
+            background: #20ba5a;
+            transform: translateY(-2px);
+        }
+
+        /* ========== PARTICLE CANVAS ========== */
+        #particle-canvas {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ========== TESTIMONIALS ========== */
+        #testimonials {
+            background: var(--bg-primary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .testi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .testi-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-4px);
+        }
+
+        .testi-stars {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: .8rem;
+            letter-spacing: 2px;
+        }
+
+        .testi-text {
+            font-size: .9rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+
+        .testi-author {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .testi-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .testi-name {
+            font-size: .88rem;
+            font-weight: 700;
+        }
+
+        .testi-role {
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        .testi-quote {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: .12;
+            line-height: 1;
+            font-family: serif;
+        }
+
+        /* ========== PRICING ========== */
+        #pricing {
+            background: var(--bg-secondary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px rgba(108, 99, 255, .2);
+        }
+
+        .pricing-card.featured::before {
+            content: '⭐ Popüler';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: .7rem;
+            font-weight: 700;
+            background: var(--gradient);
+            color: #fff;
+            padding: .25rem .7rem;
+            border-radius: 999px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-glow);
+        }
+
+        .pricing-icon {
+            font-size: 2.5rem;
+            margin-bottom: .8rem;
+        }
+
+        .pricing-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: .3rem;
+        }
+
+        .pricing-range {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .3rem;
+        }
+
+        .pricing-note {
+            font-size: .75rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .pricing-features li {
+            font-size: .82rem;
+            color: var(--text-muted);
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00dc82;
+            font-weight: 700;
+        }
+
+        .pricing-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .65rem 1.4rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            font-family: var(--font-main);
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: var(--gradient);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        /* ========== FLOATING WP ========== */
+        .floating-wp {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 900;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, .5);
+            transition: all var(--transition);
+            text-decoration: none;
+            animation: wp-pulse 2s ease-in-out infinite;
+        }
+
+        .floating-wp:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, .7);
+        }
+
+        @keyframes wp-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, .5);
+            }
+
+            50% {
+                box-shadow: 0 4px 40px rgba(37, 211, 102, .8), 0 0 0 8px rgba(37, 211, 102, .1);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .pricing-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progress-bar"></div>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-logo">HA.</div>
+            <ul class="nav-links">
+                <li><a href="#about">Hakkımda</a></li>
+                <li><a href="#skills">Yetenekler</a></li>
+                <li><a href="#projects">Projeler</a></li>
+                <li><a href="#hardware">Donanım</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menü">
+                <span></span><span></span><span></span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" aria-label="Tema değiştir"></button>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="closeMobileMenu()">Hakkımda</a>
+        <a href="#skills" onclick="closeMobileMenu()">Yetenekler</a>
+        <a href="#projects" onclick="closeMobileMenu()">Projeler</a>
+        <a href="#hardware" onclick="closeMobileMenu()">Donanım & Hobiler</a>
+        <a href="#contact" onclick="closeMobileMenu()">İletişim</a>
+    </div>
+
+    <!-- =================== HERO =================== -->
+    <section id="hero">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hero-bg-orb orb1"></div>
+        <div class="hero-bg-orb orb2"></div>
+        <div class="container hero-inner">
+            <div>
+                <p class="hero-label">&lt; Merhaba, ben &gt;</p>
+                <h1 class="hero-title">
+                    Hüseyin<br />
+                    <span class="gradient-text">Ayhan</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span class="typing-text" id="typing-el"></span><span class="typing-cursor"></span>
+                </p>
+                <div class="hero-badges">
+                    <span class="badge"><span class="dot"></span> C# / Python</span>
+                    <span class="badge"><span class="dot" style="background:var(--accent2)"></span> OpenCV /
+                        MediaPipe</span>
+                    <span class="badge"><span class="dot" style="background:var(--accent3)"></span> Adobe AE /
+                        Premiere</span>
+                    <span class="badge"><span class="dot" style="background:#00dc82"></span> RTX 5070</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">📬 İletişime Geç</a>
+                    <a href="#projects" class="btn btn-outline">🚀 Projeleri Gör</a>
+                </div>
+            </div>
+            <div class="hero-avatar">
+                <div class="avatar-ring">
+                    <div class="avatar-inner">
+                        <span class="avatar-placeholder">👨‍💻</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span class="scroll-arrow">↓</span>
+            <span>Aşağı kaydır</span>
+        </div>
+    </section>
+
+    <!-- =================== ABOUT =================== -->
+    <section id="about">
+        <div class="container">
+            <span class="section-tag reveal">// hakkımda</span>
+            <h2 class="section-title reveal">Hüseyin Ayhan</h2>
+            <div class="section-line reveal"></div>
+            <div class="about-grid">
+                <div class="about-img-wrap reveal-left">
+                    <div class="about-card-deco">
+                        <span class="about-icon">👨‍🎓</span>
+                        <div class="about-name-tag">huseyinayhan.dev</div>
+                    </div>
+                </div>
+                <div class="reveal-right">
+                    <p style="color:var(--text-muted); line-height:1.9; margin-bottom:1.5rem;">
+                        Trakya Üniversitesi <strong style="color:var(--text-primary)">Bilişim Sistemleri ve
+                            Teknolojileri</strong> bölümü öğrencisiyim.
+                        Yazılım geliştirme ve yaratıcı medya prodüksiyonu alanında çalışıyorum.
+                        Bilgisayar görüşü, motion grafik ve uygulama geliştirme projelerini tutkuyla yapıyorum.
+                    </p>
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="icon">📍</span>
+                            <span><strong>Lokasyon:</strong> Edirne / Bursa</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">🎓</span>
+                            <span><strong>Üniversite:</strong> Trakya Üniversitesi — BST</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">💼</span>
+                            <span><strong>Uzmanlık:</strong> Editör & Yazılım Geliştirici</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="icon">🖥️</span>
+                            <span><strong>Donanım:</strong> GameGaraj Slayer X7T</span>
+                        </div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <div class="stat-num">5+</div>
+                            <div class="stat-label">Teknoloji</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-num">2</div>
+                            <div class="stat-label">Alan</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-num">∞</div>
+                            <div class="stat-label">Yaratıcılık</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== SKILLS =================== -->
+    <section id="skills">
+        <div class="container">
+            <span class="section-tag reveal">// yetenekler</span>
+            <h2 class="section-title reveal">Teknoloji & Araçlar</h2>
+            <div class="section-line reveal"></div>
+            <div class="skills-grid">
+
+                <div class="skill-category reveal delay-1">
+                    <div class="skill-cat-header">
+                        <div class="skill-cat-icon icon-purple">🔷</div>
+                        <div class="skill-cat-title">Yazılım Geliştirme</div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>C# / .NET</span><span>85%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>Python</span><span>80%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="80"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category reveal delay-2">
+                    <div class="skill-cat-header">
+                        <div class="skill-cat-icon icon-green">👁️</div>
+                        <div class="skill-cat-title">Bilgisayar Görüşü</div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>OpenCV</span><span>75%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="75"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>MediaPipe</span><span>70%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="70"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category reveal delay-3">
+                    <div class="skill-cat-header">
+                        <div class="skill-cat-icon icon-red">🎬</div>
+                        <div class="skill-cat-title">Medya Prodüksiyon</div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>Adobe Premiere Pro</span><span>90%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span>Adobe After Effects</span><span>82%</span></div>
+                        <div class="skill-bar-track">
+                            <div class="skill-bar-fill" data-width="82"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category reveal delay-4">
+                    <div class="skill-cat-header">
+                        <div class="skill-cat-icon icon-cyan">⚙️</div>
+                        <div class="skill-cat-title">Diğer Araçlar</div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">VS Code</span>
+                        <span class="skill-tag">Visual Studio</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Windows</span>
+                        <span class="skill-tag">RTX SDK</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== PROJECTS =================== -->
+    <section id="projects">
+        <div class="container">
+            <span class="section-tag reveal">// projeler</span>
+            <h2 class="section-title reveal">Projelerim</h2>
+            <div class="section-line reveal"></div>
+
+            <div class="projects-info reveal">
+                <span class="projects-info-icon">💬</span>
+                <p>
+                    Projelerin detayları ve <strong>fiyatlandırma</strong> için WhatsApp üzerinden iletişime geçin.
+                    Her proje özel olarak değerlendirilmektedir.
+                </p>
+            </div>
+
+            <div class="projects-grid">
+
+                <div class="project-card reveal delay-1">
+                    <div class="project-header">
+                        <span class="project-emoji">👁️</span>
+                        <span class="project-badge badge-vision">Bilgisayar Görüşü</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">El Hareketi Tanıma Sistemi</h3>
+                        <p class="project-desc">MediaPipe ve OpenCV kullanılarak geliştirilen gerçek zamanlı el hareketi
+                            tanıma uygulaması. İşaret dili çevirisi ve gesture kontrol özellikleri içerir.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Python</span>
+                            <span class="tech-pill">MediaPipe</span>
+                            <span class="tech-pill">OpenCV</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-2">
+                    <div class="project-header">
+                        <span class="project-emoji">🔷</span>
+                        <span class="project-badge badge-software">Yazılım</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">C# Masaüstü Uygulaması</h3>
+                        <p class="project-desc">Windows Forms / WPF tabanlı özel masaüstü uygulamaları. Veritabanı
+                            entegrasyonu, kullanıcı arayüzü tasarımı ve otomasyon çözümleri.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">C#</span>
+                            <span class="tech-pill">.NET</span>
+                            <span class="tech-pill">WPF</span>
+                            <span class="tech-pill">SQL</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-3">
+                    <div class="project-header">
+                        <span class="project-emoji">🎬</span>
+                        <span class="project-badge badge-media">Medya</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Video Prodüksiyon & Montaj</h3>
+                        <p class="project-desc">Adobe Premiere Pro ile profesyonel video kurgusundan, After Effects ile
+                            sinematik motion graphic ve özel efekt çalışmalarına kadar tam prodüksiyon. <br><br><span
+                                style="color:#00d4ff;font-size:.82rem;">&#128247; <strong>Çekim İmkânı:</strong> Temmuz
+                                &ndash; Eylül arası Edirne | Eylül'e kadar Bursa. Çekim hizmeti dahilse maliyet
+                                artar.</span></p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Premiere Pro</span>
+                            <span class="tech-pill">After Effects</span>
+                            <span class="tech-pill">Motion Design</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-4">
+                    <div class="project-header">
+                        <span class="project-emoji">🤖</span>
+                        <span class="project-badge badge-vision">Yapay Zeka</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Nesne Tespiti Uygulaması</h3>
+                        <p class="project-desc">OpenCV ve derin öğrenme modelleri ile geliştirilen gerçek zamanlı nesne
+                            tespiti ve sınıflandırma sistemi. Özelleştirilebilir veri setleri ile eğitilebilir.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Python</span>
+                            <span class="tech-pill">OpenCV</span>
+                            <span class="tech-pill">YOLO</span>
+                            <span class="tech-pill">NumPy</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-5">
+                    <div class="project-header">
+                        <span class="project-emoji">🎭</span>
+                        <span class="project-badge badge-media">Efekt</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Motion Graphic & VFX</h3>
+                        <p class="project-desc">After Effects ile intro animasyonları, logo animasyonları, title
+                            efektleri ve özel VFX çalışmaları. YouTube/sosyal medya içeriklerine özel tasarımlar.
+                            <br><br><span style="color:#00d4ff;font-size:.82rem;">&#128247; <strong>Çekim
+                                    İmkânı:</strong> Temmuz &ndash; Eylül arası Edirne | Eylül'e kadar Bursa. Çekim
+                                hizmeti dahilse maliyet artar.</span>
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-pill">After Effects</span>
+                            <span class="tech-pill">VFX</span>
+                            <span class="tech-pill">Animation</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-1">
+                    <div class="project-header">
+                        <span class="project-emoji">🐍</span>
+                        <span class="project-badge badge-software">Python</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Otomasyon & Script Geliştirme</h3>
+                        <p class="project-desc">Python ile web scraping, dosya otomasyonu, veri işleme ve GUI araçları.
+                            İş süreçlerini kolaylaştıran özelleştirilmiş scriptler ve araçlar.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Python</span>
+                            <span class="tech-pill">Tkinter</span>
+                            <span class="tech-pill">Selenium</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al → <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+
+                <div class="project-card reveal delay-2">
+                    <div class="project-header">
+                        <span class="project-emoji">&#128663;</span>
+                        <span class="project-badge badge-media">Revacta</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Revacta'da Olanlar &mdash; Araba Editleri</h3>
+                        <p class="project-desc">Revacta platformu icin uretilen sinematik araba edit videolari. Hizli
+                            kesim, efektli gecisler ve dinamik muzik eslestirmesiyle otomotiv iceriklerini ust seviyeye
+                            tasir. <br><br><span style="color:#00d4ff;font-size:.82rem;">&#128247; <strong>Cekim
+                                    Imkani:</strong> Temmuz &ndash; Eylul arasi Edirne | Eylul'e kadar Bursa. Cekim
+                                hizmeti talep edilirse toplam maliyet artar.</span></p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Premiere Pro</span>
+                            <span class="tech-pill">After Effects</span>
+                            <span class="tech-pill">Color Grading</span>
+                            <span class="tech-pill">Revacta</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al &rarr; <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <!-- === ARABA YAZILIMI === -->
+                <div style="grid-column:1/-1; margin:2rem 0 1rem; display:flex; align-items:center; gap:1rem;">
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                    <span
+                        style="font-family:var(--font-code); font-size:.78rem; color:var(--accent); background:rgba(108,99,255,.1); border:1px solid rgba(108,99,255,.25); padding:.3rem 1rem; border-radius:999px; white-space:nowrap;">&#128663;
+                        Araba Yazilimi</span>
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                </div>
+
+                <div class="project-card reveal delay-3">
+                    <div class="project-header">
+                        <span class="project-emoji">&#9981;</span>
+                        <span class="project-badge badge-software">C# / Python</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Kapsamli Yakit &amp; Bakim Takip Sistemi</h3>
+                        <p class="project-desc">Fisi girer girmez 100 km'de kac litre yaktigini ve TL/KM maliyetini
+                            otomatik hesaplar. Yag, filtre, triger kayisi gibi parcalarin degisim kilometresini kaydedip
+                            bakim vakti yaklastiginda uyari verir.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">C# / Python</span>
+                            <span class="tech-pill">SQLite</span>
+                            <span class="tech-pill">GUI</span>
+                            <span class="tech-pill">Otomasyon</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al &rarr; <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal delay-4">
+                    <div class="project-header">
+                        <span class="project-emoji">&#128187;</span>
+                        <span class="project-badge badge-vision">OBD2</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="project-title">Canli OBD2 Arac Telemetri Ekrani</h3>
+                        <p class="project-desc">Aracin OBD2 soketine takilan ucuz Bluetooth cihazindan gelen anlık
+                            verileri futuristik bir arayuzle ekrana basar. Motor devri, anlık yakit tuketimi, motor
+                            sicakligi ve hata kodlari gercek zamanli gosterilir.</p>
+                        <div class="project-tech">
+                            <span class="tech-pill">Python</span>
+                            <span class="tech-pill">OBD2 BT</span>
+                            <span class="tech-pill">Tkinter</span>
+                            <span class="tech-pill">Real-time</span>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <span class="project-cta">Bilgi Al &rarr; <span>WhatsApp</span></span>
+                    </div>
+                </div>
+
+
+
+                <!-- ===== ECU TUNING SIMULATOR / LAB (spans full width) ===== -->
+                <div style="grid-column:1/-1;">
+
+                    <style>
+                        .lab-wrap {
+                            background: #0d1525;
+                            border: 1px solid #1e2840;
+                            border-radius: 18px;
+                            padding: 2rem;
+                            font-family: 'Segoe UI', sans-serif;
+                            position: relative;
+                            overflow: hidden;
+                        }
+
+                        .lab-wrap::before {
+                            content: '';
+                            position: absolute;
+                            inset: 0;
+                            background: radial-gradient(ellipse at 20% 50%, rgba(108, 99, 255, .07) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(0, 212, 255, .05) 0%, transparent 60%);
+                            pointer-events: none;
+                        }
+
+                        .lab-title {
+                            text-align: center;
+                            margin-bottom: 1.6rem;
+                        }
+
+                        .lab-title h3 {
+                            font-size: 1.2rem;
+                            font-weight: 800;
+                            letter-spacing: .12em;
+                            text-transform: uppercase;
+                            background: linear-gradient(90deg, #6c63ff, #00d4ff);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            margin: 0 0 .2rem;
+                        }
+
+                        .lab-title p {
+                            font-size: .72rem;
+                            color: #4a5578;
+                            letter-spacing: .08em;
+                            margin: 0;
+                        }
+
+                        .lab-grid {
+                            display: grid;
+                            grid-template-columns: 1fr 300px;
+                            gap: 2rem;
+                        }
+
+                        @media(max-width:900px) {
+                            .lab-grid {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+
+                        /* Main Area - Gauges & Dyno */
+                        .ecu-gauges {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 1rem;
+                            margin-bottom: 1.5rem;
+                        }
+
+                        .ecu-gauge {
+                            text-align: center;
+                            background: rgba(30, 40, 64, .4);
+                            padding: 1rem;
+                            border-radius: 12px;
+                            border: 1px solid #1e2840;
+                            position: relative;
+                            overflow: hidden;
+                        }
+
+                        .ecu-gauge.red-alert {
+                            border-color: #ff4444;
+                            background: rgba(255, 68, 68, .1);
+                            box-shadow: 0 0 15px rgba(255, 68, 68, .3);
+                        }
+
+                        .ecu-gauge-label {
+                            font-size: .65rem;
+                            letter-spacing: .14em;
+                            text-transform: uppercase;
+                            color: #7a85a3;
+                            margin-bottom: .4rem;
+                        }
+
+                        .ecu-gauge-val {
+                            font-family: 'Courier New', monospace;
+                            font-size: 2.8rem;
+                            font-weight: 900;
+                            line-height: 1;
+                            letter-spacing: -.02em;
+                            transition: color .3s;
+                        }
+
+                        .ecu-gauge-val.hp {
+                            color: #6c63ff;
+                            text-shadow: 0 0 15px rgba(108, 99, 255, .4);
+                        }
+
+                        .ecu-gauge-val.nm {
+                            color: #00d4ff;
+                            text-shadow: 0 0 15px rgba(0, 212, 255, .3);
+                        }
+
+                        .ecu-gauge-val.egt {
+                            color: #ffb03a;
+                            text-shadow: 0 0 15px rgba(255, 176, 58, .3);
+                        }
+
+                        .ecu-gauge.red-alert .ecu-gauge-val.egt {
+                            color: #ff4444;
+                            text-shadow: 0 0 20px rgba(255, 68, 68, .7);
+                            animation: ecuBlink .7s infinite;
+                        }
+
+                        .ecu-gauge-unit {
+                            font-size: .7rem;
+                            color: #4a5578;
+                            margin-top: .3rem;
+                            letter-spacing: .1em;
+                        }
+
+                        /* Dyno Canvas */
+                        .dyno-wrapper {
+                            background: #0a101a;
+                            border: 1px solid #1e2840;
+                            border-radius: 12px;
+                            padding: 1rem;
+                            margin-bottom: 1.5rem;
+                            position: relative;
+                            height: 220px;
+                        }
+
+                        .dyno-wrapper canvas {
+                            width: 100%;
+                            height: 100%;
+                            display: block;
+                        }
+
+                        .dyno-label {
+                            position: absolute;
+                            top: 1rem;
+                            left: 1rem;
+                            font-size: .65rem;
+                            color: #4a5578;
+                            letter-spacing: .1em;
+                            text-transform: uppercase;
+                        }
+
+                        .dyno-legend {
+                            position: absolute;
+                            top: 1rem;
+                            right: 1rem;
+                            font-size: .6rem;
+                            color: #a1aabf;
+                            display: flex;
+                            gap: 1rem;
+                        }
+
+                        .dyno-legend span {
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
+                        }
+
+                        .dyno-legend span::before {
+                            content: '';
+                            display: inline-block;
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                        }
+
+                        .dyno-legend .dyno-hp::before {
+                            background: #6c63ff;
+                        }
+
+                        .dyno-legend .dyno-nm::before {
+                            background: #00d4ff;
+                        }
+
+                        /* Sliders */
+                        .ecu-sliders {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 1.1rem;
+                            margin-bottom: 1.4rem;
+                            padding: 1rem;
+                            background: rgba(30, 40, 64, .2);
+                            border-radius: 12px;
+                            border: 1px solid #1e2840;
+                        }
+
+                        .ecu-slider-row {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+                        }
+
+                        .ecu-slider-name {
+                            font-size: .7rem;
+                            letter-spacing: .1em;
+                            text-transform: uppercase;
+                            color: #7a85a3;
+                            width: 130px;
+                            flex-shrink: 0;
+                        }
+
+                        .ecu-slider-track {
+                            flex: 1;
+                            position: relative;
+                        }
+
+                        input[type=range].ecu-range {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 100%;
+                            height: 6px;
+                            border-radius: 99px;
+                            background: linear-gradient(to right, var(--thumb-color, #6c63ff) var(--pct, 0%), #1e2840 var(--pct, 0%));
+                            outline: none;
+                            cursor: pointer;
+                            transition: background .1s;
+                        }
+
+                        input[type=range].ecu-range::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: var(--thumb-color, #6c63ff);
+                            box-shadow: 0 0 12px var(--thumb-color, #6c63ff);
+                            border: 2px solid #0d1525;
+                            cursor: grab;
+                            transition: transform .15s;
+                        }
+
+                        input[type=range].ecu-range:active::-webkit-slider-thumb {
+                            transform: scale(1.2);
+                            cursor: grabbing;
+                        }
+
+                        .ecu-slider-val {
+                            font-family: 'Courier New', monospace;
+                            font-size: .85rem;
+                            color: #fff;
+                            width: 36px;
+                            text-align: right;
+                            font-weight: 700;
+                        }
+
+                        .ecu-status {
+                            border-radius: 10px;
+                            padding: .9rem 1rem;
+                            font-size: .85rem;
+                            font-weight: 700;
+                            letter-spacing: .05em;
+                            text-align: center;
+                            transition: all .3s;
+                        }
+
+                        .ecu-status.ok {
+                            background: rgba(0, 212, 100, .1);
+                            border: 1px solid rgba(0, 212, 100, .3);
+                            color: #00d464;
+                            box-shadow: 0 0 20px rgba(0, 212, 100, .1);
+                        }
+
+                        .ecu-status.warn {
+                            background: rgba(255, 50, 50, .15);
+                            border: 1px solid rgba(255, 50, 50, .5);
+                            color: #ff4444;
+                            box-shadow: 0 0 30px rgba(255, 50, 50, .3);
+                            animation: ecuBlink .7s infinite;
+                        }
+
+                        @keyframes ecuBlink {
+
+                            0%,
+                            100% {
+                                opacity: 1
+                            }
+
+                            50% {
+                                opacity: .5
+                            }
+                        }
+
+                        /* Sidebar */
+                        .dtc-box {
+                            background: rgba(30, 40, 64, .4);
+                            border: 1px solid #1e2840;
+                            border-radius: 12px;
+                            padding: 1.2rem;
+                            margin-bottom: 1.5rem;
+                        }
+
+                        .dtc-box h4 {
+                            font-size: .8rem;
+                            letter-spacing: .08em;
+                            text-transform: uppercase;
+                            color: #00d4ff;
+                            margin: 0 0 1rem;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+
+                        .dtc-box input {
+                            width: 100%;
+                            background: #0a101a;
+                            border: 1px solid #334166;
+                            color: #fff;
+                            padding: .7rem 1rem;
+                            border-radius: 8px;
+                            font-family: 'Courier New', monospace;
+                            font-size: .9rem;
+                            outline: none;
+                            transition: border .3s;
+                            text-transform: uppercase;
+                        }
+
+                        .dtc-box input:focus {
+                            border-color: #6c63ff;
+                        }
+
+                        .dtc-result {
+                            margin-top: 1rem;
+                            font-size: .8rem;
+                            color: #a1aabf;
+                            line-height: 1.4;
+                            padding: .8rem;
+                            background: rgba(0, 0, 0, .2);
+                            border-left: 3px solid #334166;
+                            border-radius: 4px;
+                            min-height: 60px;
+                        }
+
+                        .dtc-result.found {
+                            border-color: #00d4ff;
+                            color: #fff;
+                        }
+
+                        .flip-cards-container {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 1rem;
+                        }
+
+                        .flip-card {
+                            background-color: transparent;
+                            height: 70px;
+                            perspective: 1000px;
+                            cursor: pointer;
+                        }
+
+                        .flip-inner {
+                            position: relative;
+                            width: 100%;
+                            height: 100%;
+                            text-align: center;
+                            transition: transform 0.6s;
+                            transform-style: preserve-3d;
+                        }
+
+                        .flip-card:hover .flip-inner {
+                            transform: rotateY(180deg);
+                        }
+
+                        .flip-front,
+                        .flip-back {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            -webkit-backface-visibility: hidden;
+                            backface-visibility: hidden;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 1rem;
+                            border: 1px solid #1e2840;
+                        }
+
+                        .flip-front {
+                            background: rgba(30, 40, 64, .3);
+                            color: #fff;
+                            font-size: 1.1rem;
+                            font-weight: 800;
+                            letter-spacing: .1em;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+                        }
+
+                        .flip-front span {
+                            font-size: .7rem;
+                            color: #6c63ff;
+                            margin-left: 8px;
+                            font-weight: 600;
+                        }
+
+                        .flip-back {
+                            background: rgba(108, 99, 255, .1);
+                            transform: rotateY(180deg);
+                            border-color: #6c63ff;
+                            font-size: .75rem;
+                            color: #e0e4f5;
+                            line-height: 1.4;
+                            text-align: left;
+                            justify-content: flex-start;
+                            align-items: flex-start;
+                        }
+
+                        .lab-footer-note {
+                            text-align: center;
+                            font-size: .62rem;
+                            color: #2e3a55;
+                            letter-spacing: .06em;
+                            margin-top: 1.5rem;
+                        }
+                    </style>
+
+                    <div class="lab-wrap">
+                        <div class="lab-title">
+                            <h3>&#x2699;&#xfe0f; Otomotiv Muhendisligi & Tuning Laboratuvari</h3>
+                            <p>// CANLI DYNO, EGT IZLEME VE DTC (ARIZA KODU) ANALIZI</p>
+                        </div>
+
+                        <div class="lab-grid">
+                            <!-- SOL TARAF: Göstergeler / Dyno / Kontroller -->
+                            <div class="lab-main">
+                                <div class="ecu-gauges">
+                                    <div class="ecu-gauge">
+                                        <div class="ecu-gauge-label">Beygir Gucu</div>
+                                        <div class="ecu-gauge-val hp" id="ecuHP">150</div>
+                                        <div class="ecu-gauge-unit">HP</div>
+                                    </div>
+                                    <div class="ecu-gauge">
+                                        <div class="ecu-gauge-label">Tork</div>
+                                        <div class="ecu-gauge-val nm" id="ecuNM">250</div>
+                                        <div class="ecu-gauge-unit">Nm</div>
+                                    </div>
+                                    <div class="ecu-gauge" id="egtGaugeBox">
+                                        <div class="ecu-gauge-label">EGT Sicakligi</div>
+                                        <div class="ecu-gauge-val egt" id="ecuEGT">450</div>
+                                        <div class="ecu-gauge-unit">&deg;C</div>
+                                    </div>
+                                </div>
+
+                                <div class="dyno-wrapper">
+                                    <div class="dyno-label">CANLI DYNO GRAFIGI</div>
+                                    <div class="dyno-legend"><span class="dyno-hp">Power (HP)</span><span
+                                            class="dyno-nm">Torque (Nm)</span></div>
+                                    <canvas id="dynoCanvas"></canvas>
+                                </div>
+
+                                <div class="ecu-sliders">
+                                    <div class="ecu-slider-row">
+                                        <span class="ecu-slider-name">&#128168; Turbo Basinci</span>
+                                        <div class="ecu-slider-track">
+                                            <input type="range" class="ecu-range" id="slBoost" min="0" max="100"
+                                                value="0" style="--thumb-color:#6c63ff;" oninput="labUpdate()">
+                                        </div>
+                                        <span class="ecu-slider-val" id="valBoost">0</span>
+                                    </div>
+                                    <div class="ecu-slider-row">
+                                        <span class="ecu-slider-name">&#9881; Yakit Puskurtme</span>
+                                        <div class="ecu-slider-track">
+                                            <input type="range" class="ecu-range" id="slFuel" min="0" max="100"
+                                                value="0" style="--thumb-color:#00d4ff;" oninput="labUpdate()">
+                                        </div>
+                                        <span class="ecu-slider-val" id="valFuel">0</span>
+                                    </div>
+                                    <div class="ecu-slider-row">
+                                        <span class="ecu-slider-name">&#9889; Atesleme Avans</span>
+                                        <div class="ecu-slider-track">
+                                            <input type="range" class="ecu-range" id="slTiming" min="0" max="100"
+                                                value="0" style="--thumb-color:#ffb03a;" oninput="labUpdate()">
+                                        </div>
+                                        <span class="ecu-slider-val" id="valTiming">0</span>
+                                    </div>
+                                </div>
+
+                                <div class="ecu-status ok" id="ecuStatus">&#9989; Motor Degerleri Optimal</div>
+                            </div>
+
+                            <!-- SAĞ TARAF: DTC Sözlük / Flip Kartlar -->
+                            <div class="lab-sidebar">
+
+                                <div class="dtc-box">
+                                    <h4>&#128269; DTC Ariza Kodu Sozlugu</h4>
+                                    <input type="text" id="dtcSearch" placeholder="Orn: P0300, P0171"
+                                        oninput="searchDTC()">
+                                    <div class="dtc-result" id="dtcResult">Arama yapmak icin bir hata kodu (OBD2)
+                                        giriniz.</div>
+                                </div>
+
+                                <div class="flip-cards-container">
+                                    <div class="flip-card">
+                                        <div class="flip-inner">
+                                            <div class="flip-front">AFR <span>(Air-Fuel Ratio)</span></div>
+                                            <div class="flip-back">Silindire giren hava ile yakit oranidir. Ideal
+                                                atmosferik motorlar icin 14.7:1 kabul edilir. Fakir karisim (yüksek AFR)
+                                                sicakligi artirir.</div>
+                                        </div>
+                                    </div>
+                                    <div class="flip-card">
+                                        <div class="flip-inner">
+                                            <div class="flip-front">EGT <span>(Exhaust Gas Temp)</span></div>
+                                            <div class="flip-back">Egzoz Gari Sicakligidir. Özellikle turbo araclarda
+                                                900&deg;C uzeri tehlikelidir; piston eritebilir. Fakir karisim, EGT'yi
+                                                ani yukseltir.</div>
+                                        </div>
+                                    </div>
+                                    <div class="flip-card">
+                                        <div class="flip-inner">
+                                            <div class="flip-front">KNOCK <span>(Vuruntu)</span></div>
+                                            <div class="flip-back">Yakitin buji caktiktan once basinc & sicaklik
+                                                yuzunden kontrolsuz patlamasidir. Avansi geri cekmek (Retard) motoru
+                                                korur.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="lab-footer-note">* Bu modül yazilim portfolyosu icin hazirlanmis simulasyondur,
+                            gercek tuning verisi degildir.</div>
+                    </div>
+
+                    <script>
+                        (function () {
+                            // --- DTC DICTIONARY ---
+                            const dtcData = {
+                                "P0300": "Rastgele/Coklu Silindir Atesleme Hatasi. Bujileri, bobinleri veya yakit basincini kontrol edin.",
+                                "P0171": "Sistem Cok Fakir (Bank 1). Oksijen sensoru, MAF sensoru veya vakum kacaklarini kontrol edin.",
+                                "P0234": "Motor Asiri Besleme Durumu (Overboost). Wastegate hortumu veya turbo selenoid valfi (N75) arizasi.",
+                                "P0420": "Katalizor Sistemi Verimliligi Esigin Altinda. Katalizor ici dolmus veya O2 sensor arizasi.",
+                                "P2138": "Gaz Pedali Konum Sensoru (APP) Kapsam Hatasi. Elektronik gaz kelebegi modulu arizali olabilir.",
+                                "P0133": "Oksijen Sensoru Yavas Yanit. Isitici devresi arizali.",
+                                "P0102": "MAF (Kutle Hava Akisi) Sensoru Devresi Dusuk Girdi. Kablo tesisati veya kirlilik sorunu.",
+                                "P1235": "Yakit Pompasi Kontrol Devresi Hatasi. Yakit kesilmesi (Cut-off) ihtimali."
+                            };
+
+                            window.searchDTC = function () {
+                                let q = document.getElementById('dtcSearch').value.toUpperCase().trim();
+                                const resEl = document.getElementById('dtcResult');
+                                if (!q) { resEl.className = 'dtc-result'; resEl.innerHTML = 'Arama yapmak icin bir hata kodu (OBD2) giriniz.'; return; }
+                                if (dtcData[q]) {
+                                    resEl.className = 'dtc-result found';
+                                    resEl.innerHTML = '<strong>Found: ' + q + '</strong><br>' + dtcData[q];
+                                } else {
+                                    resEl.className = 'dtc-result';
+                                    resEl.innerHTML = '<span style="color:#ff6c6c;">! Hata Kodu Veritabaninda Yok.</span> Format ornegi: P0300';
+                                }
+                            };
+
+                            // --- ENGINE SIMULATION & DYNO CANVAS ---
+                            const BASE_HP = 150, MAX_HP = 240;
+                            const BASE_NM = 250, MAX_NM = 400;
+                            let currentHP = BASE_HP, currentNM = BASE_NM, currentEGT = 450;
+                            let rafHP, rafNM, rafEGT;
+
+                            const canvas = document.getElementById('dynoCanvas');
+                            const ctx = canvas.getContext('2d');
+
+                            function resizeDyno() {
+                                const rect = canvas.parentElement.getBoundingClientRect();
+                                canvas.width = rect.width;
+                                canvas.height = rect.height;
+                                drawDyno(currentHP, currentNM);
+                            }
+                            window.addEventListener('resize', resizeDyno);
+
+                            function drawDyno(hp, nm) {
+                                if (!ctx) return;
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                                // Draw Grid
+                                ctx.strokeStyle = '#1e2840';
+                                ctx.lineWidth = 1;
+                                for (let i = 1; i < 5; i++) {
+                                    let y = (canvas.height / 5) * i;
+                                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+                                }
+
+                                // Dynamic Curve logic based on Peak HP/NM
+                                // A standard dyno curve goes from 2000 to 7000 RPM roughly
+                                const points = 50;
+
+                                // Draw Torque Curve (Cyan)
+                                ctx.beginPath();
+                                ctx.strokeStyle = '#00d4ff';
+                                ctx.lineWidth = 3;
+                                ctx.shadowBlur = 10; ctx.shadowColor = '#00d4ff';
+                                for (let i = 0; i < points; i++) {
+                                    let x = (canvas.width / (points - 1)) * i;
+                                    // Parabolic curve peaking around center-left
+                                    let progress = i / (points - 1); // 0 to 1
+                                    let curve = Math.sin(progress * Math.PI) * 1.1;
+                                    let val = nm * curve;
+                                    let y = canvas.height - (val / 450) * canvas.height * 0.8;
+                                    if (i === 0) ctx.moveTo(x, canvas.height);
+                                    else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+
+                                // Draw HP Curve (Purple)
+                                ctx.beginPath();
+                                ctx.strokeStyle = '#6c63ff';
+                                ctx.shadowColor = '#6c63ff';
+                                for (let i = 0; i < points; i++) {
+                                    let x = (canvas.width / (points - 1)) * i;
+                                    // Power curve peaks later
+                                    let progress = i / (points - 1);
+                                    let curve = Math.sin(progress * Math.PI - 0.3); // shifted right
+                                    if (curve < 0) curve = 0;
+                                    let val = hp * curve * 1.15;
+                                    let y = canvas.height - (val / 280) * canvas.height * 0.8;
+                                    if (i === 0) ctx.moveTo(x, canvas.height);
+                                    else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+                                ctx.shadowBlur = 0; // reset
+                            }
+
+                            function animateVal(id, start, end, duration, formatStr, callback) {
+                                let startTs = null;
+                                const step = (ts) => {
+                                    if (!startTs) startTs = ts;
+                                    let progress = Math.min((ts - startTs) / duration, 1);
+                                    let val = Math.floor(progress * (end - start) + start);
+                                    document.getElementById(id).textContent = val;
+                                    if (callback) callback(val);
+                                    if (progress < 1) requestAnimationFrame(step);
+                                };
+                                requestAnimationFrame(step);
+                            }
+
+                            window.labUpdate = function () {
+                                const boost = +document.getElementById('slBoost').value;
+                                const fuel = +document.getElementById('slFuel').value;
+                                const timing = +document.getElementById('slTiming').value;
+
+                                document.getElementById('valBoost').textContent = boost;
+                                document.getElementById('valFuel').textContent = fuel;
+                                document.getElementById('valTiming').textContent = timing;
+
+                                ['slBoost', 'slFuel', 'slTiming'].forEach(id => {
+                                    const el = document.getElementById(id);
+                                    el.style.setProperty('--pct', el.value + '%');
+                                });
+
+                                const status = document.getElementById('ecuStatus');
+                                const egtBox = document.getElementById('egtGaugeBox');
+
+                                // Safety check: High boost, low fuel -> High EGT -> Knock Danger
+                                const warn = boost > 75 && fuel < 40;
+
+                                let targetHP = BASE_HP, targetNM = BASE_NM, targetEGT = 450;
+
+                                if (warn) {
+                                    // Emergency mode: drop power heavily, max out EGT
+                                    targetHP = BASE_HP - 20;
+                                    targetNM = BASE_NM - 30;
+                                    targetEGT = 950 + Math.floor(Math.random() * 40); // 950-990 deg C
+
+                                    status.className = 'ecu-status warn';
+                                    status.innerHTML = '&#9888;&#65039; KRITIK: EGZOZ GAZI SICAKLIGI (EGT) YUKSEK! MOTORU KORUMAK ICIN YAKITI ARTIR.';
+                                    egtBox.className = 'ecu-gauge red-alert';
+                                } else {
+                                    // Normal tuning calculation
+                                    // Boost gives big power and EGT. Fuel lowers EGT and adds slight power. Timing adds crisp response.
+                                    const powRatio = (boost * 1.5 + fuel * 0.8 + timing * 0.7) / 300;
+                                    targetHP = Math.round(BASE_HP + (MAX_HP - BASE_HP) * powRatio);
+                                    targetNM = Math.round(BASE_NM + (MAX_NM - BASE_NM) * powRatio);
+
+                                    // Calculate realistic EGT
+                                    targetEGT = 450 + (boost * 4) - (fuel * 1.5) + (timing * 0.5);
+                                    if (targetEGT < 400) targetEGT = 400; // idle temp
+
+                                    status.className = 'ecu-status ok';
+                                    status.innerHTML = '&#9989; Motor Degerleri Optimal - Tune Stabil';
+                                    egtBox.className = 'ecu-gauge';
+                                    if (targetEGT > 800) egtBox.className = 'ecu-gauge warn-yellow'; // implicit css rule
+                                }
+
+                                animateVal('ecuHP', currentHP, targetHP, 400, '', (v) => { currentHP = v; drawDyno(currentHP, currentNM); });
+                                animateVal('ecuNM', currentNM, targetNM, 400, '', (v) => { currentNM = v; drawDyno(currentHP, currentNM); });
+                                animateVal('ecuEGT', currentEGT, targetEGT, 600, '', (v) => currentEGT = v);
+                            };
+
+                            // init
+                            setTimeout(resizeDyno, 500);
+                        })();
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== HARDWARE & HOBBIES =================== -->
+    <section id="hardware">
+        <div class="container">
+            <span class="section-tag reveal">// donanım & hobiler</span>
+            <h2 class="section-title reveal">Geliştirme Ortamım</h2>
+            <div class="section-line reveal"></div>
+            <div class="hardware-grid">
+
+                <div class="hw-card reveal-left">
+                    <div class="hw-card-title">
+                        <span>🖥️</span> GameGaraj Slayer X7T
+                    </div>
+                    <div class="hw-spec">
+                        <span class="spec-label">GPU</span>
+                        <span class="spec-value"><strong>NVIDIA RTX 5070</strong></span>
+                        <span class="spec-label">CPU</span>
+                        <span class="spec-value"><strong>Intel Core i7</strong></span>
+                        <span class="spec-label">Platform</span>
+                        <span class="spec-value"><strong>GameGaraj Slayer X7T</strong></span>
+                        <span class="spec-label">OS</span>
+                        <span class="spec-value"><strong>Windows 11</strong></span>
+                        <span class="spec-label">Kullanım</span>
+                        <span class="spec-value">Video Render, AI Model Eğitimi, Kodlama</span>
+                    </div>
+                    <div
+                        style="margin-top:1.5rem; padding:.8rem 1rem; background:rgba(108,99,255,.08); border:1px solid rgba(108,99,255,.2); border-radius:10px;">
+                        <p style="font-size:.82rem; color:var(--text-muted); font-family:var(--font-code);">
+                            🎮 gaming · 🤖 ai · 🎬 render
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hw-card reveal-right">
+                    <div class="hw-card-title">
+                        <span>🎯</span> Hobiler & İlgi Alanları
+                    </div>
+                    <div class="hobbies-list">
+                        <div class="hobby-item">
+                            <span class="hobby-icon">🎮</span>
+                            <div class="hobby-text">
+                                <strong>Gaming</strong>
+                                RTX 5070 gücüyle yüksek FPS deneyimi
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <span class="hobby-icon">🎬</span>
+                            <div class="hobby-text">
+                                <strong>Video Prodüksiyon</strong>
+                                Yaratıcı içerik üretimi ve montaj
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <span class="hobby-icon">🤖</span>
+                            <div class="hobby-text">
+                                <strong>Yapay Zeka & CV</strong>
+                                Bilgisayar görüşü projeleri keşfetmek
+                            </div>
+                        </div>
+                        <div class="hobby-item">
+                            <span class="hobby-icon">💻</span>
+                            <div class="hobby-text">
+                                <strong>Yazılım Geliştirme</strong>
+                                Yeni teknolojiler öğrenmek ve uygulamak
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== CONTACT =================== -->
+    <section id="contact">
+        <div class="container">
+            <span class="section-tag reveal">// iletişim</span>
+            <h2 class="section-title reveal">Benimle Çalışalım</h2>
+            <div class="section-line reveal"></div>
+            <div class="contact-grid">
+
+                <div class="contact-info reveal-left">
+                    <h3>Bir fikrin mi var?</h3>
+                    <p>
+                        Proje fiyatlandırması, iş birliği teklifleri veya herhangi bir soru için
+                        WhatsApp üzerinden ulaşabilirsiniz. En hızlı ve verimli iletişim kanalım
+                        WhatsApp'tır.
+                    </p>
+                    <div class="contact-methods">
+                        <a href="https://wa.me/905306462442" class="contact-method" target="_blank" rel="noopener">
+                            <div class="cm-icon cm-wp">💬</div>
+                            <div>
+                                <div class="cm-label">WhatsApp</div>
+                                <div class="cm-value">+90 530 646 24 42</div>
+                            </div>
+                        </a>
+                        <div class="contact-method">
+                            <div class="cm-icon cm-ph">📞</div>
+                            <div>
+                                <div class="cm-label">Telefon</div>
+                                <div class="cm-value">+90 530 646 24 42</div>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <div class="cm-icon cm-loc">📍</div>
+                            <div>
+                                <div class="cm-label">Lokasyon</div>
+                                <div class="cm-value">Edirne / Bursa, Türkiye</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-right">
+                    <div class="contact-wp-card">
+                        <div class="wp-icon-big">💬</div>
+                        <h4>WhatsApp ile Hızlı İletişim</h4>
+                        <p>
+                            Projeler ve fiyatlandırma için WhatsApp'tan <strong>anında yanıt</strong> alın.
+                            Her proje özel olarak değerlendirilir.
+                        </p>
+                        <a href="https://wa.me/905306462442?text=Merhaba%20H%C3%BCseyin%2C%20projen%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                            class="wp-btn" target="_blank" rel="noopener">
+                            💬 WhatsApp'ta Yaz
+                        </a>
+                        <p class="wp-note">wa.me/905306462442</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== TESTIMONIALS =================== -->
+    <section id="testimonials">
+        <div class="container">
+            <span class="section-tag reveal">// referanslar</span>
+            <h2 class="section-title reveal">Müşteri Yorumları</h2>
+            <div class="section-line reveal"></div>
+            <div class="testimonials-grid">
+
+                <div class="testi-card reveal delay-1">
+                    <div class="testi-quote">&rdquo;</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"Kurumsal tanıtım videomuz için çok profesyonel bir iş çıkardı. Montaj
+                        kalitesi ve efektler gerçekten etkileyiciydi."</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">👨‍💼</div>
+                        <div>
+                            <div class="testi-name">Ahmet K.</div>
+                            <div class="testi-role">İşletme Sahibi, Edirne</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testi-card reveal delay-2">
+                    <div class="testi-quote">&rdquo;</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"C# ile geliştirdiği otomasyon yazılımı sayesinde iş süreçlerimiz çok daha
+                        hızlı işliyor. Harika bir geliştirici!"</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">👩‍💼</div>
+                        <div>
+                            <div class="testi-name">Selin M.</div>
+                            <div class="testi-role">Proje Yöneticisi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testi-card reveal delay-3">
+                    <div class="testi-quote">&rdquo;</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"YouTube kanalım için yaptığı intro animasyonu tam beklediğim gibiydi. Çok
+                        hızlı teslim etti, kesinlikle tavsiye ederim."</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">🎮</div>
+                        <div>
+                            <div class="testi-name">Emre T.</div>
+                            <div class="testi-role">İçerik Üreticisi</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== PRICING =================== -->
+    <section id="pricing">
+        <div class="container">
+            <span class="section-tag reveal">// fiyatlar</span>
+            <h2 class="section-title reveal">Hizmet Fiyat Aralıkları</h2>
+            <div class="section-line reveal"></div>
+            <p class="reveal" style="color:var(--text-muted); margin-bottom:2.5rem; font-size:.95rem;">Aşağıdaki
+                fiyatlar <strong style="color:var(--text-primary)">genel aralıklardır</strong>. Projeye özgü kesin fiyat
+                için WhatsApp'tan ulaşın.</p>
+            <div class="pricing-grid">
+
+                <div class="pricing-card reveal delay-1">
+                    <div class="pricing-icon">🎬</div>
+                    <div class="pricing-name">Video Montaj</div>
+                    <div class="pricing-range">500₺ – 2.000₺</div>
+                    <div class="pricing-note">Projeye göre değişir</div>
+                    <ul class="pricing-features">
+                        <li>Kısa kurgu (1-3 dk)</li>
+                        <li>Müzik & ses düzeni</li>
+                        <li>Renk düzeltme</li>
+                        <li>Alt yazı ekleme</li>
+                    </ul>
+                    <a href="https://wa.me/905306462442?text=Video%20montaj%20fiyat%C4%B1%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                        class="pricing-btn" target="_blank">💬 Fiyat Al</a>
+                </div>
+
+                <div class="pricing-card featured reveal delay-2">
+                    <div class="pricing-icon">🎭</div>
+                    <div class="pricing-name">Motion Graphic & VFX</div>
+                    <div class="pricing-range">800₺ – 3.500₺</div>
+                    <div class="pricing-note">Karmaşıklığa göre</div>
+                    <ul class="pricing-features">
+                        <li>Intro / outro animasyon</li>
+                        <li>Logo animasyonu</li>
+                        <li>Title efektleri</li>
+                        <li>Özel VFX çalışması</li>
+                    </ul>
+                    <a href="https://wa.me/905306462442?text=Motion%20graphic%20fiyat%C4%B1%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                        class="pricing-btn" target="_blank">💬 Fiyat Al</a>
+                </div>
+
+                <div class="pricing-card reveal delay-3">
+                    <div class="pricing-icon">🔷</div>
+                    <div class="pricing-name">Yazılım Geliştirme</div>
+                    <div class="pricing-range">1.000₺ – 8.000₺</div>
+                    <div class="pricing-note">Kapsama göre</div>
+                    <ul class="pricing-features">
+                        <li>C# / Python uygulama</li>
+                        <li>OpenCV / AI proje</li>
+                        <li>Otomasyon scripta</li>
+                        <li>Teknik destek dahil</li>
+                    </ul>
+                    <a href="https://wa.me/905306462442?text=Yaz%C4%B1l%C4%B1m%20geli%C5%9Ftirme%20fiyat%C4%B1%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                        class="pricing-btn" target="_blank">💬 Fiyat Al</a>
+                </div>
+
+                <div class="pricing-card reveal delay-4">
+                    <div class="pricing-icon">👁️</div>
+                    <div class="pricing-name">Bilgisayar Görüşü</div>
+                    <div class="pricing-range">2.000₺ – 10.000₺</div>
+                    <div class="pricing-note">Proje boyutuna göre</div>
+                    <ul class="pricing-features">
+                        <li>Nesne tespiti sistemi</li>
+                        <li>El / yüz tanıma</li>
+                        <li>Gerçek zamanlı analiz</li>
+                        <li>Model eğitimi dahil</li>
+                    </ul>
+                    <a href="https://wa.me/905306462442?text=CV%20proje%20fiyat%C4%B1%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                        class="pricing-btn" target="_blank">💬 Fiyat Al</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================== FOOTER =================== -->
+    <footer>
+        <p>© 2025 <span>Hüseyin Ayhan</span> — Editör & Yazılım Geliştirici · Edirne / Bursa</p>
+        <p style="margin-top:.4rem; font-size:.75rem;">Designed with <span>♥</span> & code</p>
+    </footer>
+
+    <!-- ====== MODAL ====== -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <div>
+                    <div id="modal-emoji" style="font-size:2rem; margin-bottom:.4rem;"></div>
+                    <h3 id="modal-title" style="font-size:1.2rem; font-weight:800;"></h3>
+                </div>
+                <button class="modal-close"
+                    onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-preview" id="modal-preview"></div>
+                <p class="modal-desc" id="modal-desc"></p>
+                <div class="modal-tech" id="modal-tech"></div>
+                <a id="modal-wp-btn" href="#" target="_blank" class="modal-wp">💬 Fiyat &amp; Bilgi İçin WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== FLOATING WP ====== -->
+    <a href="https://wa.me/905306462442" class="floating-wp" target="_blank" rel="noopener"
+        title="WhatsApp ile yaz">💬</a>
+
+    <script>
+        // ---- Progress Bar ----
+        const progressBar = document.getElementById('progress-bar');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            progressBar.style.width = (scrolled * 100) + '%';
+        });
+
+        // ---- Theme Toggle ----
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = document.cookie.split(';').find(c => c.trim().startsWith('theme='));
+        if (savedTheme && savedTheme.includes('light')) document.body.classList.add('light');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light');
+            const isLight = document.body.classList.contains('light');
+            document.cookie = 'theme=' + (isLight ? 'light' : 'dark') + '; path=/; max-age=31536000';
+        });
+
+        // ---- Mobile Menu ----
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            mobileMenu.classList.toggle('open');
+        });
+        function closeMobileMenu() {
+            hamburger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+        }
+
+        // ---- Typing Animation ----
+        const typingEl = document.getElementById('typing-el');
+        const typingLines = [
+            'Editor & Yazilim Gelistirici',
+            'Gorsel Anlati Uzmani',
+            'OpenCV & MediaPipe Gelistiricisi',
+            'Adobe After Effects Kullanicisi',
+            'Kod yazan gozler, sahneyi kuran eller.'
+        ];
+        let tIdx = 0, cIdx = 0, deleting = false;
+        function typeLoop() {
+            const line = typingLines[tIdx];
+            if (!deleting) {
+                typingEl.textContent = line.slice(0, ++cIdx);
+                if (cIdx === line.length) { deleting = true; setTimeout(typeLoop, 1800); return; }
+            } else {
+                typingEl.textContent = line.slice(0, --cIdx);
+                if (cIdx === 0) { deleting = false; tIdx = (tIdx + 1) % typingLines.length; }
+            }
+            setTimeout(typeLoop, deleting ? 40 : 70);
+        }
+        typeLoop();
+
+        // ---- Scroll Reveal ----
+        const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        // ---- Skill Bars ----
+        const skillBars = document.querySelectorAll('.skill-bar-fill');
+        const barObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.getAttribute('data-width') + '%';
+                    barObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        skillBars.forEach(bar => barObserver.observe(bar));
+
+        // ---- Active Nav Link ----
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 100) current = sec.id; });
+            navLinks.forEach(link => {
+                link.style.color = link.getAttribute('href') === '#' + current ? 'var(--text-primary)' : '';
+            });
+        });
+
+        // ---- Nav shadow ----
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            nav.style.boxShadow = window.scrollY > 50 ? '0 4px 30px rgba(0,0,0,.4)' : 'none';
+        });
+
+        // ---- Project Modal ----
+        const projectData = [
+            { emoji: '👁️', title: 'El Hareketi Tanima Sistemi', bg: 'linear-gradient(135deg,#0e1420,#1a2a1a)', desc: 'MediaPipe ve OpenCV kullanilarak gelistirilen gercek zamanli el hareketi tanima uygulamasi. Isaret dili cevirisi ve gesture kontrol ozellikleri icerir.', tech: ['Python', 'MediaPipe', 'OpenCV', 'NumPy'], msg: 'El hareketi tanima projesi hakkinda bilgi almak istiyorum.' },
+            { emoji: '🔷', title: 'C# Masaustu Uygulamasi', bg: 'linear-gradient(135deg,#0e1420,#1a1a2a)', desc: 'Windows Forms / WPF tabanli ozel masaustu uygulamalari. Veritabani entegrasyonu, kullanici arayuzu tasarimi ve otomasyon cozumleri sunar.', tech: ['C#', '.NET', 'WPF', 'SQL'], msg: 'C# masaustu uygulama projesi hakkinda bilgi almak istiyorum.' },
+            { emoji: '🎬', title: 'Video Produksiyon & Montaj', bg: 'linear-gradient(135deg,#1a0e0e,#2a1a0e)', desc: 'Adobe Premiere Pro ile profesyonel video kurgusu, After Effects ile sinematik motion graphic ve VFX calismalari.', tech: ['Premiere Pro', 'After Effects', 'Motion Design', 'Color'], msg: 'Video produksiyon hizmeti hakkinda fiyat almak istiyorum.' },
+            { emoji: '🤖', title: 'Nesne Tespiti Uygulamasi', bg: 'linear-gradient(135deg,#0a1a0a,#0e1a10)', desc: 'OpenCV ve derin ogrenme modelleri ile gercek zamanli nesne tespiti. YOLO tabanli, ozellestirilebilir.', tech: ['Python', 'OpenCV', 'YOLO', 'NumPy'], msg: 'Nesne tespiti projesi hakkinda bilgi almak istiyorum.' },
+            { emoji: '🎭', title: 'Motion Graphic & VFX', bg: 'linear-gradient(135deg,#1a0a1a,#1a1a0a)', desc: 'After Effects ile intro animasyonlari, logo animasyonlari, title efektleri ve ozel VFX calismalari. YouTube icin ozel tasarimlar.', tech: ['After Effects', 'VFX', 'Animation', 'Motion Design'], msg: 'Motion graphic ve VFX hizmeti hakkinda fiyat almak istiyorum.' },
+            { emoji: '🐍', title: 'Otomasyon & Script Gelistirme', bg: 'linear-gradient(135deg,#0e1a0e,#0a0e1a)', desc: 'Python ile web scraping, dosya otomasyonu, veri isleme ve GUI araclari. Is sureclerini kolaylastiran ozellestirilmis scriptler.', tech: ['Python', 'Tkinter', 'Selenium', 'Pandas'], msg: 'Python otomasyon projesi hakkinda bilgi almak istiyorum.' }
+        ];
+        document.querySelectorAll('.project-card').forEach((card, i) => {
+            card.addEventListener('click', () => openModal(i));
+        });
+        function openModal(i) {
+            const d = projectData[i];
+            document.getElementById('modal-emoji').textContent = d.emoji;
+            document.getElementById('modal-title').textContent = d.title;
+            const prev = document.getElementById('modal-preview');
+            prev.style.background = d.bg;
+            prev.textContent = d.emoji;
+            document.getElementById('modal-desc').textContent = d.desc;
+            const techEl = document.getElementById('modal-tech');
+            techEl.innerHTML = d.tech.map(t => '<span class="tech-pill">' + t + '</span>').join('');
+            document.getElementById('modal-wp-btn').href =
+                'https://wa.me/905306462442?text=' + encodeURIComponent('Merhaba Huseyin, ' + d.msg);
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+        function closeModal(e) {
+            if (e.target === document.getElementById('modalOverlay'))
+                document.getElementById('modalOverlay').classList.remove('open');
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+        });
+
+        // ---- Particle Canvas ----
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        function createParticles() {
+            particles = [];
+            const count = Math.floor(canvas.width * canvas.height / 12000);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.5 + 0.3,
+                    dx: (Math.random() - .5) * .4,
+                    dy: (Math.random() - .5) * .4,
+                    o: Math.random() * .5 + .1
+                });
+            }
+        }
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(108,99,255,' + p.o + ')';
+                ctx.fill();
+                p.x += p.dx; p.y += p.dy;
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+            particles.forEach((a, i) => {
+                particles.slice(i + 1).forEach(b => {
+                    const dist = Math.hypot(a.x - b.x, a.y - b.y);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+                        ctx.strokeStyle = 'rgba(108,99,255,' + ((1 - dist / 100) * 0.15) + ')';
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        resizeCanvas(); createParticles(); drawParticles();
+        window.addEventListener('resize', () => { resizeCanvas(); createParticles(); });
+    </script>
+</body>
+
+</html>
